@@ -16,11 +16,11 @@
   var els = {
     slotWrap: $('slotWrap'), slotNumber: $('slotNumber'), slotName: $('slotName'),
     statusText: $('statusText'), statusLine: $('statusLine'),
-    btnStart: $('btnStart'), btnStop: $('btnStop'), btnResetRound: $('btnResetRound'),
-    statTotal: $('statTotal'), statAvail: $('statAvail'), statWon: $('statWon'),
+    btnStart: $('btnStart'), btnStop: $('btnStop'), btnResetRound: $('btnResetRound'), btnFull: $('btnFull'),
+    statTotal: $('statTotal'), statAvail: $('statAvail'), statWon: $('statWon'), statRounds: $('statRounds'),
     pList: $('pList'), searchBox: $('searchBox'), historyList: $('historyList'),
     modal: $('winnerModal'), modalNumber: $('modalNumber'), modalName: $('modalName'),
-    modalLabel: $('modalLabel'),
+    modalLabel: $('modalLabel'), modalHeading: document.querySelector('#winnerModal .modal-card h2'),
     btnAgain: $('btnAgain'), btnClose: $('btnClose'),
     tickerTrack: $('tickerTrack'), modalMarquee: $('modalMarquee')
   };
@@ -56,7 +56,7 @@
     els.slotWrap.classList.remove('winner-mode');
     els.slotNumber.textContent = '---';
     els.slotNumber.classList.add('idle');
-    els.slotName.textContent = 'SIAP UNTUK UNDIAN';
+    els.slotName.textContent = M.getSettings().idleText || 'SIAP UNTUK UNDIAN';
   }
 
   function setStatus(msg, cls) {
@@ -67,9 +67,14 @@
   function updateStats() {
     var list = sortedList();
     var pool = getPool();
+    var s = M.getSettings();
     els.statTotal.textContent = list.length;
     els.statAvail.textContent = pool.length;
     els.statWon.textContent = wonCount();
+    if (els.statRounds) els.statRounds.textContent = M.getHistory().length;
+    if (els.slotWrap && !els.slotWrap.classList.contains('winner-mode') && !RUNNING) {
+      els.slotName.textContent = s.idleText || 'SIAP UNTUK UNDIAN';
+    }
   }
 
   /* ---------------- START / STOP ---------------- */
@@ -236,6 +241,7 @@
     if (nm) { nm.textContent = labName; nm.style.display = show ? '' : 'none'; }
     if (sep) sep.style.display = show ? '' : 'none';
     if (els.modalLabel) els.modalLabel.textContent = labNo;
+    if (els.modalHeading) els.modalHeading.textContent = s.modalTitle || 'PEMENANG TERPILIH';
   }
 
   function renderList() {
@@ -323,7 +329,15 @@
     var list = sortedList();
     var pool = getPool();
     var hist = M.getHistory();
-    parts.push('MEGA UNDIAN // FUTURE-DRAW SYSTEM ONLINE');
+    var s = M.getSettings();
+    if (s.tickerText) {
+      s.tickerText.split(/[•]|\n/).forEach(function (t) {
+        var x = t.trim();
+        if (x) parts.push(x);
+      });
+    } else {
+      parts.push('MEGA UNDIAN // ONLINE');
+    }
     parts.push('TOTAL PESERTA: ' + list.length);
     parts.push('POOL AKTIF: ' + pool.length);
     if (hist.length) {
@@ -405,16 +419,38 @@
     startDraw();
   }
 
+  /* ---------------- MODE PROYEKTOR / FULLSCREEN ---------------- */
+
+  function toggleFullscreen() {
+    var body = document.body;
+    body.classList.toggle('projector');
+    document.documentElement.classList.toggle('projector', body.classList.contains('projector'));
+    if (body.classList.contains('projector')) {
+      var de = document.documentElement;
+      if (de.requestFullscreen) de.requestFullscreen().catch(function () {});
+      M.toast('Mode proyektor aktif', 'ok');
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    }
+  }
+
   /* ---------------- EVENTS ---------------- */
 
   function wire() {
     els.btnStart.addEventListener('click', startDraw);
     els.btnStop.addEventListener('click', stopDraw);
     els.btnResetRound.addEventListener('click', resetRound);
+    if (els.btnFull) els.btnFull.addEventListener('click', toggleFullscreen);
     els.btnClose.addEventListener('click', closeModal);
     els.btnAgain.addEventListener('click', again);
     els.searchBox.addEventListener('input', renderList);
     els.modal.addEventListener('click', function (e) { if (e.target === els.modal) closeModal(); });
+
+    document.addEventListener('megacfg', function () {
+      updateLabels();
+      renderTicker();
+      if (!RUNNING) { if (!lastWinner) idleDisplay(); else idleDisplayIfIdle(); }
+    });
 
     document.addEventListener('keydown', function (e) {
       var apop = document.getElementById('adminModal');

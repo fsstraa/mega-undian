@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/style.css?v=3">
 </head>
 <body>
   <!-- LAYER BACKGROUND -->
@@ -26,9 +26,29 @@
     </div>
     <nav class="nav">
       <a href="index.html" class="nav-btn">UNDIAN</a>
-      <a href="admin.html" class="nav-btn active">ADMIN</a>
+      <button id="btnLogout" class="nav-logout">KELUAR</button>
     </nav>
   </header>
+
+  <!-- LOGIN ADMIN -->
+  <div class="apop" id="loginModal">
+    <div class="apop-card login-card">
+      <div class="apop-head">
+        <div class="apop-title"><span class="brand-mark apop-mark">M</span> ADMIN ACCESS // LOGIN</div>
+      </div>
+      <div class="login-body">
+        <label>USERNAME
+          <input id="loginUser" type="text" autocomplete="username" placeholder="username">
+        </label>
+        <label>PASSWORD
+          <input id="loginPass" type="password" autocomplete="current-password" placeholder="password" style="letter-spacing:3px">
+        </label>
+        <p class="login-msg" id="loginMsg"></p>
+        <button id="btnLogin" class="btn btn-primary" style="width:100%">MASUK</button>
+        <p class="login-hint">akses admin &middot; khusus petugas undian</p>
+      </div>
+    </div>
+  </div>
 
   <main class="wrap admin-wrap">
     <!-- PENGATURAN TAMPILAN -->
@@ -47,6 +67,15 @@
         </label>
         <label>LABEL NAMA
           <input id="setLabelName" type="text" placeholder="NAMA">
+        </label>
+        <label>TEKS TICKER (JALAN DI BAWAH)
+          <input id="setTicker" type="text">
+        </label>
+        <label>PESAN SLOT IDLE
+          <input id="setIdle" type="text">
+        </label>
+        <label>JUDUL MODAL PEMENANG
+          <input id="setModalTitle" type="text">
         </label>
         <label>WARNA AKSEN 1 (indigo / cyan)
           <input id="setAccent" type="color" value="#6d7cff">
@@ -173,7 +202,7 @@
     </section>
   </main>
 
-  <script src="assets/js/store.js"></script>
-  <script src="assets/js/admin.js"></script>
+  <script src="assets/js/store.js?v=3"></script>
+  <script src="assets/js/admin.js?v=3"></script>
 </body>
 </html>

@@ -694,6 +694,73 @@ details.bulk p { font-family: var(--font-mono); font-size: 11px; color: var(--mu
 .apop-body .admin-wrap { max-width: none; margin: 0; padding: 0; }
 .apop-body .panel { margin-bottom: 18px; }
 
+/* ---------- LOGIN ---------- */
+
+.login-card { width: min(420px, 96vw); }
+.login-body {
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 26px 28px 24px;
+}
+.login-body label {
+  display: flex; flex-direction: column; gap: 7px;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px;
+  color: var(--muted);
+}
+.login-body input {
+  padding: 12px 14px; font-size: 15px; font-family: var(--font-body);
+  background: rgba(8, 12, 24, 0.7);
+  border: 1px solid var(--border-strong);
+  border-radius: 12px; color: var(--text);
+  outline: none;
+}
+.login-body input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(109, 124, 255, 0.15); }
+.login-msg {
+  font-family: var(--font-mono); font-size: 12px; color: #fb7185;
+  min-height: 16px; letter-spacing: 0.4px;
+}
+.login-hint {
+  font-family: var(--font-mono); font-size: 10px; text-align: center;
+  color: var(--muted); letter-spacing: 1px; margin: 0;
+}
+.apop-x-wrap { display: flex; align-items: center; gap: 8px; }
+.apop-lo {
+  font-family: var(--font-body); font-size: 12px; font-weight: 600;
+  padding: 7px 14px; color: var(--muted);
+  background: transparent; border: 1px solid var(--border-strong);
+  border-radius: 9px; cursor: pointer; transition: all 0.15s;
+}
+.apop-lo:hover { color: #fb7185; border-color: #fb7185; }
+.nav-logout {
+  font-family: var(--font-body); font-size: 12px; font-weight: 600;
+  padding: 8px 14px; color: var(--muted);
+  background: transparent; border: 1px solid var(--border-strong);
+  border-radius: 10px; cursor: pointer; transition: all 0.15s;
+}
+.nav-logout:hover { color: #fb7185; border-color: #fb7185; }
+
+/* ---------- MODE PROYEKTOR (layar besar) ---------- */
+
+body.projector .topbar,
+body.projector .participants,
+body.projector .history,
+body.projector .ticker,
+body.projector .admin-pencil,
+body.projector #toastWrap { display: none !important; }
+body.projector .wrap { display: block; max-width: none; margin: 0; padding: 0; }
+body.projector .draw-stage {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  border: none; border-radius: 0; margin: 0;
+}
+body.projector .slot-number { font-size: clamp(140px, 34vw, 360px); line-height: 1; }
+body.projector .slot-name { font-size: clamp(30px, 7vw, 80px); }
+body.projector .slot-label { font-size: 16px; letter-spacing: 3px; }
+body.projector .status-line { font-size: 18px; }
+body.projector .controls { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 20; }
+body.projector .stats { position: fixed; top: 20px; right: 24px; z-index: 20; }
+body.projector .stat { padding: 10px 16px; }
+
 /* ---------- TOAST ---------- */
 
 #toastWrap {

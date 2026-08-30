@@ -26,7 +26,10 @@
     sound: true,
     labelNumber: 'NO',
     labelName: 'NAMA',
-    logoUrl: ''
+    logoUrl: '',
+    tickerText: 'SELAMAT DATANG DI UNDIAN MEGA • TEKAN [ MULAI UNDIAN ] UNTUK MEMUTAR • SEMOGA BERUNTUNG',
+    idleText: 'SIAP UNTUK UNDIAN',
+    modalTitle: 'PEMENANG TERPILIH'
   };
 
   function safeParse(raw, fallback) {
