@@ -313,7 +313,6 @@
 
   function renderList() {
     updateLabels();
-    var showNames = M.getSettings().showNames;
     var kw = (els.searchBox.value || '').toLowerCase().trim();
     var list = sortedList().filter(function (p) {
       if (!kw) return true;
@@ -335,12 +334,10 @@
       no.className = 'p-no';
       no.textContent = String(p.number).padStart(2, '0');
       row.appendChild(no);
-      if (showNames) {
-        var nm = document.createElement('span');
-        nm.className = 'p-name';
-        nm.textContent = p.name || 'TANPA NAMA';
-        row.appendChild(nm);
-      }
+      var nm = document.createElement('span');
+      nm.className = 'p-name';
+      nm.textContent = p.name || 'TANPA NAMA';
+      row.appendChild(nm);
       if (p.won) {
         var b = document.createElement('span');
         b.className = 'p-badge won';
