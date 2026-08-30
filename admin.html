@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEGA UNDIAN // ADMIN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <!-- LAYER BACKGROUND -->
+  <canvas id="matrixBG"></canvas>
+  <div id="bgElement"></div>
+  <div id="overlay"></div>
+  <div id="scanlines"></div>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="brand">
+      <img id="brandLogo" class="brand-logo" alt="" style="display:none">
+      <span class="brand-mark" id="brandMark">M</span>
+      <span class="brand-text">MEGA UNDIAN</span>
+      <span class="brand-badge">ADMIN</span>
+    </div>
+    <nav class="nav">
+      <a href="index.html" class="nav-btn">UNDIAN</a>
+      <a href="admin.html" class="nav-btn active">ADMIN</a>
+    </nav>
+  </header>
+
+  <main class="wrap admin-wrap">
+    <!-- PENGATURAN TAMPILAN -->
+    <section class="panel g-clip">
+      <div class="panel-head"><h2>{ PENGATURAN TAMPILAN }</h2><span class="hint">live preview</span></div>
+
+      <div class="form-grid">
+        <label>JUDUL UNDIAN
+          <input id="setTitle" type="text">
+        </label>
+        <label>SUB JUDUL
+          <input id="setSubtitle" type="text" placeholder="FUTURE-DRAW SYSTEM // V2.0">
+        </label>
+        <label>LABEL NOMOR PESERTA
+          <input id="setLabelNumber" type="text" placeholder="NO">
+        </label>
+        <label>LABEL NAMA
+          <input id="setLabelName" type="text" placeholder="NAMA">
+        </label>
+        <label>WARNA AKSEN 1 (indigo / cyan)
+          <input id="setAccent" type="color" value="#6d7cff">
+        </label>
+        <label>WARNA AKSEN 2 (pink / magenta)
+          <input id="setAccent2" type="color" value="#f472b6">
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <label>TIPE LATAR BELAKANG
+          <select id="bgType">
+            <option value="none">NONE // MATRIX SAJA</option>
+            <option value="color">WARNA POLOS</option>
+            <option value="gradient">GRADIENT</option>
+            <option value="url">GAMBAR / URL</option>
+          </select>
+        </label>
+        <label id="lblColor" style="display:none">WARNA LATAR
+          <input id="bgColor" type="color" value="#0a0f1e">
+        </label>
+      </div>
+
+      <div id="gradWrap" style="display:none">
+        <div class="field-label">PRESET GRADIENT (klik untuk terapkan)</div>
+        <div class="grad-chips" id="gradChips"></div>
+      </div>
+
+      <div id="urlWrap" style="display:none">
+        <label>URL GAMBAR
+          <input id="bgUrl" type="url" placeholder="https://.../foto-undian.jpg">
+        </label>
+        <div class="row-inline">
+          <button id="btnSetUrl" class="btn btn-primary">TERAPKAN URL</button>
+          <button id="btnUpload" class="btn btn-ghost">UPLOAD GAMBAR DARI PC</button>
+          <button id="btnClearBg" class="btn btn-danger">HAPUS LATAR</button>
+          <input id="fileUpload" type="file" accept="image/*" hidden>
+        </div>
+        <p style="font-family:var(--font-mono);font-size:11px;color:var(--dim);margin-top:8px;">
+          format: jpg, jpeg, png, webp, gif dll. gambar otomatis dikompres & disimpan di browser (IndexedDB, kapasitas besar).
+        </p>
+      </div>
+
+      <div class="field-label" style="margin-top:6px;">LOGO BRAND (di samping teks MEGA UNDIAN)</div>
+      <div class="row-inline" style="margin-top:4px">
+        <input id="logoUrl" type="url" placeholder="https://.../logo.png" style="flex:1;min-width:160px">
+        <button id="btnLogoUrl" class="btn btn-primary">TERAPKAN URL</button>
+        <button id="btnLogoUpload" class="btn btn-ghost">UPLOAD LOGO</button>
+        <button id="btnLogoClear" class="btn btn-danger">HAPUS</button>
+        <input id="fileLogo" type="file" accept="image/*" hidden>
+      </div>
+
+      <div class="form-grid" style="margin-top:6px;">
+        <label>GELAP OVERLAY (0 = terang, 1 = gelap)
+          <input id="setOverlay" type="range" min="0" max="1" step="0.05" value="0.35">
+        </label>
+        <div class="row-inline" style="margin-top:0">
+          <label class="chk"><input id="setMatrix" type="checkbox"> MATRIX RAIN</label>
+          <label class="chk"><input id="setSound" type="checkbox"> SOUND FX</label>
+          <label class="chk"><input id="setNames" type="checkbox"> TAMPILKAN NAMA</label>
+          <label class="chk"><input id="setRemove" type="checkbox"> HAPUS PEMENANG DARI POOL</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- MANAJEMEN PESERTA -->
+    <section class="panel g-clip">
+      <div class="panel-head"><h2>{ PESERTA }</h2><span class="hint">mendukung 100+ peserta</span></div>
+
+      <div class="gen-box">
+        <div class="field-label">AUTO GENERATE NOMOR PESERTA</div>
+        <div class="add-row">
+          <input id="genCount" type="number" min="1" placeholder="masukkan jumlah peserta, mis. 120">
+          <button id="btnGen" class="btn btn-primary">GENERATE</button>
+        </div>
+        <p class="gen-info" id="genInfo">total saat ini: 0</p>
+      </div>
+
+      <div class="add-row">
+        <input id="addName" type="text" placeholder="NAMA PESERTA">
+        <input id="addNumber" type="number" min="1" placeholder="NO (kosong = auto)">
+        <button id="btnAdd" class="btn btn-primary">TAMBAH</button>
+      </div>
+
+      <details class="bulk">
+        <summary>&gt; IMPORT BATCH / PASTE DARI SHEET</summary>
+        <p>paste langsung dari Excel / Google Sheet (tiap baris = 1 peserta). kolom: NO lalu NAMA — nama otomatis terdata ke nomor.</p>
+        <textarea id="bulkArea" rows="5" placeholder="101  ANA&#10;102  BUDI&#10;CITRA (auto nomor)&#10;atau format: NAMA|NO"></textarea>
+        <div class="row-inline">
+          <button id="btnImport" class="btn btn-primary">IMPORT</button>
+          <button id="btnSample" class="btn btn-ghost">ISI CONTOH (8)</button>
+        </div>
+      </details>
+
+      <div class="row-inline">
+        <button id="btnSheet" class="btn btn-ghost">IMPORT DARI FILE SHEET (.csv/.txt)</button>
+        <input id="fileSheet" type="file" accept=".csv,.txt,.tsv,text/csv,text/plain,text/tab-separated-values" hidden>
+        <span class="hint">kolom NO lalu NAMA — nama otomatis terdata ke nomor</span>
+      </div>
+
+      <div class="search"><span class="s-arrow">&gt;</span><input id="adminSearch" type="text" placeholder="cari nama / nomor..."></div>
+
+      <div class="admin-stats">
+        <span>TOTAL: <b id="pStatTotal">0</b></span>
+        <span>PEMENANG: <b id="pStatWon">0</b></span>
+      </div>
+
+      <div class="p-table" id="pTable"></div>
+    </section>
+
+    <!-- DATA & RESET -->
+    <section class="panel g-clip">
+      <div class="panel-head"><h2>{ DATA &amp; RESET }</h2></div>
+      <div class="row-inline">
+        <button id="btnExport" class="btn btn-primary">EXPORT JSON</button>
+        <button id="btnImportJson" class="btn btn-ghost">IMPORT JSON</button>
+        <input id="fileImport" type="file" accept=".json,application/json" hidden>
+      </div>
+      <div class="row-inline danger-zone">
+        <button id="btnResetWins" class="btn btn-danger">RESET SEMUA KEMENANGAN</button>
+        <button id="btnClearParts" class="btn btn-danger">HAPUS SEMUA PESERTA</button>
+        <button id="btnFactory" class="btn btn-danger">FACTORY RESET (SEMUA)</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/store.js"></script>
+  <script src="assets/js/admin.js"></script>
+</body>
+</html>
