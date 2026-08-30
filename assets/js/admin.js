@@ -18,6 +18,28 @@
 
   function $(id) { return document.getElementById(id); }
 
+  var AUTH_USER = 'Himasi';
+  var AUTH_PASS = 'Megaundi';
+  var AUTH_KEY = 'megaUndian:auth';
+
+  function authed() {
+    try { return sessionStorage.getItem(AUTH_KEY) === '1'; }
+    catch (e) { return true; }
+  }
+  function setAuth() {
+    try { sessionStorage.setItem(AUTH_KEY, '1'); } catch (e) {}
+  }
+  function clearAuth() {
+    try { sessionStorage.removeItem(AUTH_KEY); } catch (e) {}
+  }
+  function showLogin() {
+    if (els.loginModal) els.loginModal.classList.add('open');
+    if (els.loginUser) setTimeout(function () { els.loginUser.focus(); }, 80);
+  }
+  function hideLogin() {
+    if (els.loginModal) els.loginModal.classList.remove('open');
+  }
+
   var els = {
     setTitle: $('setTitle'), setSubtitle: $('setSubtitle'),
     setLabelNumber: $('setLabelNumber'), setLabelName: $('setLabelName'),
@@ -42,7 +64,9 @@
     genCount: $('genCount'), btnGen: $('btnGen'), genInfo: $('genInfo'),
     btnSheet: $('btnSheet'), fileSheet: $('fileSheet'),
     logoUrl: $('logoUrl'), btnLogoUrl: $('btnLogoUrl'), btnLogoUpload: $('btnLogoUpload'),
-    btnLogoClear: $('btnLogoClear'), fileLogo: $('fileLogo')
+    btnLogoClear: $('btnLogoClear'), fileLogo: $('fileLogo'),
+    loginModal: $('loginModal'), loginUser: $('loginUser'), loginPass: $('loginPass'),
+    btnLogin: $('btnLogin'), loginMsg: $('loginMsg'), btnLogout: $('btnLogout')
   };
 
   /* ---------------- SETTINGS ---------------- */
@@ -791,12 +815,61 @@
     });
   }
 
-  /* ---------------- POPUP ADMIN (tombol pensil) ---------------- */
+  /* ---------------- POPUP ADMIN (tombol pensil) + LOGIN ---------------- */
+
+  function attemptLogin() {
+    var u = (els.loginUser.value || '').trim();
+    var p = els.loginPass.value || '';
+    if (u.toLowerCase() === AUTH_USER.toLowerCase() && p === AUTH_PASS) {
+      setAuth();
+      hideLogin();
+      var ap = document.getElementById('adminModal');
+      if (ap) ap.classList.add('open');
+      els.loginMsg.textContent = '';
+      els.loginUser.value = '';
+      els.loginPass.value = '';
+      M.toast('Akses admin dibuka', 'ok');
+    } else {
+      clearAuth();
+      els.loginUser.value = '';
+      els.loginPass.value = '';
+      els.loginMsg.textContent = '> username atau password salah // akses ditolak';
+      if (els.loginUser) els.loginUser.focus();
+    }
+  }
+
+  function logout() {
+    clearAuth();
+    var ap = document.getElementById('adminModal');
+    if (ap) ap.classList.remove('open');
+    els.loginMsg.textContent = '';
+    showLogin();
+    M.toast('Sesi admin ditutup', 'ok');
+  }
+
+  function wireAuth() {
+    hideLogin();
+    if (els.btnLogin) {
+      els.btnLogin.addEventListener('click', attemptLogin);
+      els.loginUser.addEventListener('keydown', function (e) { if (e.key === 'Enter') attemptLogin(); });
+      els.loginPass.addEventListener('keydown', function (e) { if (e.key === 'Enter') attemptLogin(); });
+    }
+    if (els.btnLogout) els.btnLogout.addEventListener('click', logout);
+    var lc = $('btnCloseLogin');
+    if (lc) lc.addEventListener('click', hideLogin);
+    if (els.loginModal) els.loginModal.addEventListener('click', function (e) { if (e.target === els.loginModal) hideLogin(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && els.loginModal && els.loginModal.classList.contains('open')) hideLogin();
+    });
+  }
 
   function wirePopup() {
     var apop = document.getElementById('adminModal');
     if (!apop) return;
-    function open() { apop.classList.add('open'); }
+    function open() {
+      if (!authed()) { showLogin(); return; }
+      apop.classList.add('open');
+    }
     function close() { apop.classList.remove('open'); }
     var opener = document.getElementById('btnOpenAdmin');
     if (opener) opener.addEventListener('click', open);
@@ -817,6 +890,7 @@
     renderGenInfo();
     wire();
     wirePopup();
+    wireAuth();
   }
 
   if (document.readyState === 'loading') {

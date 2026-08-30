@@ -580,6 +580,8 @@
       }
       var apop = document.getElementById('adminModal');
       if (apop && apop.classList.contains('open')) return;
+      var lgm = document.getElementById('loginModal');
+      if (lgm && lgm.classList.contains('open')) return;
       if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
       if (e.code === 'Space') {
         e.preventDefault();
