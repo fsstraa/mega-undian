@@ -738,6 +738,36 @@ details.bulk p { font-family: var(--font-mono); font-size: 11px; color: var(--mu
 }
 .nav-logout:hover { color: #fb7185; border-color: #fb7185; }
 
+/* ---------- KONFIRMASI PEMENANG ---------- */
+
+.confirm-bar {
+  display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;
+  margin-top: 16px;
+  padding: 12px 18px;
+  background: rgba(109, 124, 255, 0.08);
+  border: 1px dashed rgba(109, 124, 255, 0.45);
+  border-radius: 14px;
+  animation: fadeIn 0.25s ease both;
+}
+.confirm-txt {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.6px;
+  color: var(--text); margin-right: 4px;
+}
+
+/* ---------- MODAL PEMENANG ---------- */
+
+.modal-card .modal-prize {
+  font-family: var(--font-mono); font-size: 13px; letter-spacing: 2px;
+  color: var(--accent2);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+.h-chip .h-prize {
+  display: block;
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px;
+  color: var(--accent2); margin-top: 2px;
+}
+
 /* ---------- MODE PROYEKTOR (layar besar) ---------- */
 
 body.projector .topbar,
@@ -757,6 +787,7 @@ body.projector .slot-number { font-size: clamp(140px, 34vw, 360px); line-height:
 body.projector .slot-name { font-size: clamp(30px, 7vw, 80px); }
 body.projector .slot-label { font-size: 16px; letter-spacing: 3px; }
 body.projector .status-line { font-size: 18px; }
+body.projector .confirm-bar { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); z-index: 20; }
 body.projector .controls { position: fixed; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 20; }
 body.projector .stats { position: fixed; top: 20px; right: 24px; z-index: 20; }
 body.projector .stat { padding: 10px 16px; }

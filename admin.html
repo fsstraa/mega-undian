@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=4">
+  <link rel="stylesheet" href="assets/css/style.css?v=5">
 </head>
 <body>
   <!-- LAYER BACKGROUND -->
@@ -77,6 +77,9 @@
         <label>JUDUL MODAL PEMENANG
           <input id="setModalTitle" type="text">
         </label>
+        <label>LABEL HADIAH / PRIZE
+          <input id="setPrize" type="text" placeholder="HADIAH UTAMA">
+        </label>
         <label>WARNA AKSEN 1 (indigo / cyan)
           <input id="setAccent" type="color" value="#6d7cff">
         </label>
@@ -137,6 +140,8 @@
           <label class="chk"><input id="setSound" type="checkbox"> SOUND FX</label>
           <label class="chk"><input id="setNames" type="checkbox"> TAMPILKAN NAMA</label>
           <label class="chk"><input id="setRemove" type="checkbox"> HAPUS PEMENANG DARI POOL</label>
+          <label class="chk"><input id="setConfirm" type="checkbox"> TANYA KONFIRMASI PEMENANG</label>
+          <button id="btnTest" class="btn btn-ghost">TEST SUARA</button>
         </div>
       </div>
     </section>
@@ -191,6 +196,7 @@
       <div class="panel-head"><h2>{ DATA &amp; RESET }</h2></div>
       <div class="row-inline">
         <button id="btnExport" class="btn btn-primary">EXPORT JSON</button>
+        <button id="btnCsv" class="btn btn-ghost">EXPORT CSV</button>
         <button id="btnImportJson" class="btn btn-ghost">IMPORT JSON</button>
         <input id="fileImport" type="file" accept=".json,application/json" hidden>
       </div>
@@ -202,7 +208,7 @@
     </section>
   </main>
 
-  <script src="assets/js/store.js?v=4"></script>
-  <script src="assets/js/admin.js?v=4"></script>
+  <script src="assets/js/store.js?v=5"></script>
+  <script src="assets/js/admin.js?v=5"></script>
 </body>
 </html>

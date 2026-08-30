@@ -8,6 +8,9 @@
   if (!M) return;
 
   var RUNNING = false;
+  var PENDING = false;
+  var pendingWinner = null;
+  var pendingPool = [];
   var intervalId = null;
   var stopTimer = null;
   var lastWinner = null;
@@ -20,9 +23,10 @@
     statTotal: $('statTotal'), statAvail: $('statAvail'), statWon: $('statWon'), statRounds: $('statRounds'),
     pList: $('pList'), searchBox: $('searchBox'), historyList: $('historyList'),
     modal: $('winnerModal'), modalNumber: $('modalNumber'), modalName: $('modalName'),
-    modalLabel: $('modalLabel'), modalHeading: document.querySelector('#winnerModal .modal-card h2'),
+    modalLabel: $('modalLabel'), modalPrize: $('modalPrize'), modalHeading: document.querySelector('#winnerModal .modal-card h2'),
     btnAgain: $('btnAgain'), btnClose: $('btnClose'),
-    tickerTrack: $('tickerTrack'), modalMarquee: $('modalMarquee')
+    tickerTrack: $('tickerTrack'), modalMarquee: $('modalMarquee'),
+    confirmBar: $('confirmBar'), confirmTxt: $('confirmTxt'), btnConfirm: $('btnConfirm'), btnReroll: $('btnReroll')
   };
 
   /* ---------------- POOL ---------------- */
@@ -146,10 +150,68 @@
         delay = Math.round(28 + Math.pow(i, 1.9) * 1.1);
         stopTimer = setTimeout(step, delay);
       } else {
-        announce(winner);
+        finishPick(winner, pool);
       }
     }
     stopTimer = setTimeout(step, delay);
+  }
+
+  /* ---------------- KONFIRMASI PEMENANG (anti salah klik) ---------------- */
+
+  function finishPick(winner, pool) {
+    if (M.getSettings().confirmWinner) {
+      showPending(winner, pool);
+    } else {
+      announce(winner);
+    }
+  }
+
+  function showPending(p, pool) {
+    PENDING = true;
+    pendingWinner = p;
+    pendingPool = pool || getPool();
+    els.slotWrap.classList.add('winner-mode');
+    els.slotNumber.classList.add('winner');
+    els.slotNumber.textContent = String(p.number);
+    var s = M.getSettings();
+    els.slotName.textContent = (s.showNames && p.name) ? p.name : '';
+    setStatus('KONFIRMASI: #' + p.number + ' TERPILIH. SAHKAN ATAU ACAK LAGI', '');
+    els.confirmBar.style.display = '';
+    M.beep(660, 0.12, 'triangle', 0.14);
+    setTimeout(function () { M.beep(880, 0.14, 'triangle', 0.14); }, 140);
+  }
+
+  function confirmPending() {
+    if (!PENDING || !pendingWinner) return;
+    PENDING = false;
+    els.confirmBar.style.display = 'none';
+    var p = pendingWinner;
+    pendingWinner = null;
+    pendingPool = [];
+    announce(p);
+  }
+
+  function rerollPending() {
+    if (!PENDING) return;
+    var pool = pendingPool.filter(function (x) { return x.id !== pendingWinner.id; });
+    if (!pool.length) {
+      setStatus('HANYA SISA SATU PESERTA — SAHKAN SAJA.', '');
+      M.beep(220, 0.2, 'square', 0.12);
+      return;
+    }
+    var next = pool[Math.floor(Math.random() * pool.length)];
+    els.slotNumber.classList.remove('winner');
+    void els.slotNumber.offsetWidth;
+    showPending(next, pendingPool);
+    M.beep(500, 0.08, 'square', 0.1);
+  }
+
+  function clearPending() {
+    if (stopTimer) clearTimeout(stopTimer);
+    PENDING = false;
+    pendingWinner = null;
+    pendingPool = [];
+    if (els.confirmBar) els.confirmBar.style.display = 'none';
   }
 
   /* ---------------- ANNOUNCE WINNER ---------------- */
@@ -164,7 +226,7 @@
     M.saveParticipants(list);
 
     var hist = M.getHistory();
-    hist.unshift({ number: p.number, name: p.name || '', ts: Date.now() });
+    hist.unshift({ number: p.number, name: p.name || '', prize: M.getSettings().prizeLabel || '', ts: Date.now() });
     if (hist.length > 200) hist.length = 200;
     M.saveHistory(hist);
 
@@ -179,6 +241,7 @@
     }
 
     els.modalNumber.textContent = String(p.number);
+    els.modalPrize.textContent = M.getSettings().prizeLabel || '';
     var showNames = M.getSettings().showNames;
     if (showNames && p.name) {
       els.modalName.textContent = p.name;
@@ -209,6 +272,7 @@
       RUNNING = false;
       els.slotWrap.classList.remove('running');
     }
+    clearPending();
     if (stopTimer) clearTimeout(stopTimer);
 
     var list = M.getParticipants();
@@ -242,6 +306,7 @@
     if (sep) sep.style.display = show ? '' : 'none';
     if (els.modalLabel) els.modalLabel.textContent = labNo;
     if (els.modalHeading) els.modalHeading.textContent = s.modalTitle || 'PEMENANG TERPILIH';
+    if (els.modalPrize) els.modalPrize.textContent = s.prizeLabel || '';
   }
 
   function renderList() {
@@ -314,6 +379,12 @@
         tm.textContent = fmtTime(h.ts);
         chip.appendChild(b);
         chip.appendChild(nm);
+        if (h.prize) {
+          var pz = document.createElement('span');
+          pz.className = 'h-prize';
+          pz.textContent = 'HADIAH: ' + h.prize;
+          chip.appendChild(pz);
+        }
         chip.appendChild(tm);
         els.historyList.appendChild(chip);
       });
@@ -338,6 +409,7 @@
     } else {
       parts.push('MEGA UNDIAN // ONLINE');
     }
+    if (s.prizeLabel) parts.push('HADIAH: ' + s.prizeLabel);
     parts.push('TOTAL PESERTA: ' + list.length);
     parts.push('POOL AKTIF: ' + pool.length);
     if (hist.length) {
@@ -359,6 +431,7 @@
     var parts = [
       '✔ SELAMAT KEPADA PEMENANG: #' + num + nm,
       '✔ NOMOR ' + num + ' RESMI TERPILIH',
+      'HADIAH: ' + (s.prizeLabel || 'UTAMA'),
       '✔ MEGA UNDIAN ONLINE LIVE'
     ];
     var one = parts.join('   ');
@@ -445,12 +518,14 @@
     els.btnAgain.addEventListener('click', again);
     els.searchBox.addEventListener('input', renderList);
     els.modal.addEventListener('click', function (e) { if (e.target === els.modal) closeModal(); });
+    if (els.btnConfirm) els.btnConfirm.addEventListener('click', confirmPending);
+    if (els.btnReroll) els.btnReroll.addEventListener('click', rerollPending);
 
     document.addEventListener('megacfg', function () {
       updateLabels();
       renderList();
       renderTicker();
-      if (!RUNNING) { if (!lastWinner) idleDisplay(); else idleDisplayIfIdle(); }
+      if (!RUNNING && !PENDING) { if (!lastWinner) idleDisplay(); else idleDisplayIfIdle(); }
     });
 
     document.addEventListener('keydown', function (e) {
@@ -459,6 +534,7 @@
       if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
       if (e.code === 'Space') {
         e.preventDefault();
+        if (PENDING) { confirmPending(); return; }
         if (!RUNNING && els.btnStart.disabled) return;
         RUNNING ? stopDraw() : startDraw();
       }

@@ -44,6 +44,7 @@
     setTitle: $('setTitle'), setSubtitle: $('setSubtitle'),
     setLabelNumber: $('setLabelNumber'), setLabelName: $('setLabelName'),
     setTicker: $('setTicker'), setIdle: $('setIdle'), setModalTitle: $('setModalTitle'),
+    setPrize: $('setPrize'), setConfirm: $('setConfirm'), btnTest: $('btnTest'),
     setAccent: $('setAccent'), setAccent2: $('setAccent2'),
     bgType: $('bgType'), bgColor: $('bgColor'), bgUrl: $('bgUrl'),
     lblColor: $('lblColor'), gradWrap: $('gradWrap'), urlWrap: $('urlWrap'),
@@ -55,6 +56,7 @@
     adminSearch: $('adminSearch'), pTable: $('pTable'),
     pStatTotal: $('pStatTotal'), pStatWon: $('pStatWon'),
     btnExport: $('btnExport'), btnImportJson: $('btnImportJson'), fileImport: $('fileImport'),
+    btnCsv: $('btnCsv'),
     btnResetWins: $('btnResetWins'), btnClearParts: $('btnClearParts'), btnFactory: $('btnFactory'),
     fileUpload: $('fileUpload'), btnUpload: $('btnUpload'), btnSetUrl: $('btnSetUrl'), btnClearBg: $('btnClearBg'),
     genCount: $('genCount'), btnGen: $('btnGen'), genInfo: $('genInfo'),
@@ -76,6 +78,7 @@
     s.tickerText = els.setTicker.value || M.DEFAULT_SETTINGS.tickerText;
     s.idleText = els.setIdle.value || M.DEFAULT_SETTINGS.idleText;
     s.modalTitle = els.setModalTitle.value || M.DEFAULT_SETTINGS.modalTitle;
+    s.prizeLabel = els.setPrize.value || M.DEFAULT_SETTINGS.prizeLabel;
     s.accentColor = els.setAccent.value;
     s.accent2 = els.setAccent2.value;
     s.backgroundType = els.bgType.value;
@@ -87,6 +90,7 @@
     s.sound = els.setSound.checked;
     s.showNames = els.setNames.checked;
     s.removeWinner = els.setRemove.checked;
+    s.confirmWinner = els.setConfirm.checked;
     return s;
   }
 
@@ -141,6 +145,7 @@
     els.setTicker.value = s.tickerText;
     els.setIdle.value = s.idleText;
     els.setModalTitle.value = s.modalTitle;
+    els.setPrize.value = s.prizeLabel;
     els.setAccent.value = s.accentColor;
     els.setAccent2.value = s.accent2;
     els.bgType.value = s.backgroundType;
@@ -151,6 +156,7 @@
     els.setSound.checked = !!s.sound;
     els.setNames.checked = !!s.showNames;
     els.setRemove.checked = !!s.removeWinner;
+    els.setConfirm.checked = !!s.confirmWinner;
     syncBgSections();
     renderGradChips();
   }
@@ -499,9 +505,9 @@
   /* ---------------- EVENTS ---------------- */
 
   function wire() {
-    [els.setTitle, els.setSubtitle, els.setLabelNumber, els.setLabelName, els.setTicker, els.setIdle, els.setModalTitle,
+    [els.setTitle, els.setSubtitle, els.setLabelNumber, els.setLabelName, els.setTicker, els.setIdle, els.setModalTitle, els.setPrize,
      els.setAccent, els.setAccent2, els.bgType, els.bgColor,
-     els.setOverlay, els.setMatrix, els.setSound, els.setNames, els.setRemove]
+     els.setOverlay, els.setMatrix, els.setSound, els.setNames, els.setRemove, els.setConfirm]
       .forEach(function (el) {
         el.addEventListener('input', commit);
         el.addEventListener('change', commit);
@@ -622,6 +628,34 @@
         els.logoUrl.value = '';
         M.toast('Logo dihapus', 'ok');
       });
+    });
+
+    els.btnTest.addEventListener('click', function () {
+      M.beep(660, 0.12, 'triangle', 0.14);
+      setTimeout(function () { M.beep(880, 0.12, 'triangle', 0.14); }, 130);
+      setTimeout(function () { M.beep(1320, 0.2, 'triangle', 0.14); }, 270);
+    });
+
+    els.btnCsv.addEventListener('click', function () {
+      var rows = M.getParticipants().slice().sort(function (a, b) { return a.number - b.number; });
+      function esc(v) {
+        v = String(v == null ? '' : v);
+        return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v;
+      }
+      var lines = ['NO,NAMA,STATUS'];
+      rows.forEach(function (p) {
+        lines.push([p.number, p.name || '', p.won ? 'PEMENANG' : 'AKTIF'].map(esc).join(','));
+      });
+      var blob = new Blob(['\uFEFF' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'mega-undian-peserta-' + new Date().toISOString().slice(0, 10) + '.csv';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      M.toast('Daftar peserta diexport (CSV)', 'ok');
     });
 
     els.btnAdd.addEventListener('click', function () {

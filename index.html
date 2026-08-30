@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=4">
+  <link rel="stylesheet" href="assets/css/style.css?v=5">
 </head>
 <body>
   <!-- LAYER BACKGROUND -->
@@ -53,6 +53,12 @@
         <button id="btnFull" class="btn btn-ghost">&#9711; FULLSCREEN</button>
       </div>
 
+      <div class="confirm-bar" id="confirmBar" style="display:none">
+        <span class="confirm-txt" id="confirmTxt">&#9888; calon pemenang terpilih. SAHKAN atau ACAK LAGI?</span>
+        <button id="btnConfirm" class="btn btn-primary">&#10003; SAHKAN</button>
+        <button id="btnReroll" class="btn btn-ghost">ACAK LAGI</button>
+      </div>
+
       <div class="stats">
         <div class="stat"><span class="stat-num" id="statTotal">0</span><span class="stat-lbl">TOTAL</span></div>
         <div class="stat"><span class="stat-num accent" id="statAvail">0</span><span class="stat-lbl">AKTIF</span></div>
@@ -82,6 +88,7 @@
       <div class="drag-hint">⠿ GESER</div>
       <h2 id="modalHeading">PEMENANG TERPILIH</h2>
       <div class="modal-name" id="modalName">--</div>
+      <div class="modal-prize" id="modalPrize">HADIAH UTAMA</div>
       <div class="modal-label" id="modalLabel">NO</div>
       <div class="modal-number" id="modalNumber">00</div>
       <div class="modal-btns">
@@ -155,6 +162,9 @@
             <label>JUDUL MODAL PEMENANG
               <input id="setModalTitle" type="text">
             </label>
+            <label>LABEL HADIAH / PRIZE
+              <input id="setPrize" type="text" placeholder="HADIAH UTAMA">
+            </label>
             <label>WARNA AKSEN 1 (indigo / cyan)
               <input id="setAccent" type="color" value="#6d7cff">
             </label>
@@ -215,6 +225,8 @@
               <label class="chk"><input id="setSound" type="checkbox"> SOUND FX</label>
               <label class="chk"><input id="setNames" type="checkbox"> TAMPILKAN NAMA</label>
               <label class="chk"><input id="setRemove" type="checkbox"> HAPUS PEMENANG DARI POOL</label>
+              <label class="chk"><input id="setConfirm" type="checkbox"> TANYA KONFIRMASI PEMENANG</label>
+              <button id="btnTest" class="btn btn-ghost">TEST SUARA</button>
             </div>
           </div>
         </section>
@@ -269,6 +281,7 @@
           <div class="panel-head"><h2>{ DATA &amp; RESET }</h2></div>
           <div class="row-inline">
             <button id="btnExport" class="btn btn-primary">EXPORT JSON</button>
+            <button id="btnCsv" class="btn btn-ghost">EXPORT CSV</button>
             <button id="btnImportJson" class="btn btn-ghost">IMPORT JSON</button>
             <input id="fileImport" type="file" accept=".json,application/json" hidden>
           </div>
@@ -289,8 +302,8 @@
     <div class="marquee"><div class="marquee-track" id="tickerTrack"></div></div>
   </div>
 
-  <script src="assets/js/store.js?v=4"></script>
-  <script src="assets/js/draw.js?v=4"></script>
-  <script src="assets/js/admin.js?v=4"></script>
+  <script src="assets/js/store.js?v=5"></script>
+  <script src="assets/js/draw.js?v=5"></script>
+  <script src="assets/js/admin.js?v=5"></script>
 </body>
 </html>

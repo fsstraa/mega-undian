@@ -29,7 +29,9 @@
     logoUrl: '',
     tickerText: 'SELAMAT DATANG DI UNDIAN MEGA • TEKAN [ MULAI UNDIAN ] UNTUK MEMUTAR • SEMOGA BERUNTUNG',
     idleText: 'SIAP UNTUK UNDIAN',
-    modalTitle: 'PEMENANG TERPILIH'
+    modalTitle: 'PEMENANG TERPILIH',
+    prizeLabel: 'HADIAH UTAMA',
+    confirmWinner: false
   };
 
   function safeParse(raw, fallback) {
