@@ -14,12 +14,16 @@
   var intervalId = null;
   var stopTimer = null;
   var lastWinner = null;
+  var drumTimer = null;
 
   function $(id) { return document.getElementById(id); }
   var els = {
     slotWrap: $('slotWrap'), slotNumber: $('slotNumber'), slotName: $('slotName'),
     statusText: $('statusText'), statusLine: $('statusLine'),
-    btnStart: $('btnStart'), btnStop: $('btnStop'), btnResetRound: $('btnResetRound'), btnFull: $('btnFull'),
+    btnStart: $('btnStart'), btnStop: $('btnStop'), btnResetRound: $('btnResetRound'),
+    btnFull: $('btnFull'), btnQr: $('btnQr'),
+    qrModal: $('qrModal'), qrImg: $('qrImg'), qrUrl: $('qrUrl'),
+    btnCloseQr: $('btnCloseQr'), btnCopyLink: $('btnCopyLink'),
     statTotal: $('statTotal'), statAvail: $('statAvail'), statWon: $('statWon'), statRounds: $('statRounds'),
     pList: $('pList'), searchBox: $('searchBox'), historyList: $('historyList'),
     modal: $('winnerModal'), modalNumber: $('modalNumber'), modalName: $('modalName'),
@@ -100,10 +104,17 @@
     els.slotWrap.classList.add('running');
     setStatus('MENGACAK...', '');
     M.beep(520, 0.08, 'square', 0.1);
+    var s = M.getSettings();
+    var speed = Math.max(8, Math.min(60, parseInt(s.rollSpeed, 10) || 26));
+    if (s.sound) {
+      drumTimer = setInterval(function () {
+        M.beep(240 + Math.random() * 160, 0.05, 'square', 0.05);
+      }, 120);
+    }
     intervalId = setInterval(function () {
       var p = pool[Math.floor(Math.random() * pool.length)];
       display(p);
-    }, 26);
+    }, speed);
   }
 
   function stopDraw() {
@@ -111,6 +122,7 @@
     RUNNING = false;
     clearInterval(intervalId);
     intervalId = null;
+    if (drumTimer) { clearInterval(drumTimer); drumTimer = null; }
     els.btnStart.disabled = true;
     els.btnStop.disabled = true;
     els.slotWrap.classList.remove('running');
@@ -129,7 +141,7 @@
 
   function landTo(winner, pool) {
     var idx = pool.indexOf(winner);
-    var steps = 22;
+    var steps = Math.max(6, Math.min(40, parseInt(M.getSettings().suspenseSteps, 10) || 22));
     var i = 0;
     var delay = 28;
     setStatus('MENETAPKAN PEMENANG...', '');
@@ -272,6 +284,7 @@
       RUNNING = false;
       els.slotWrap.classList.remove('running');
     }
+    if (drumTimer) { clearInterval(drumTimer); drumTimer = null; }
     clearPending();
     if (stopTimer) clearTimeout(stopTimer);
 
@@ -507,6 +520,37 @@
     }
   }
 
+  /* ---------------- QR / BUKA DI HP ---------------- */
+
+  function wireQr() {
+    function openQr() {
+      var url = location.href;
+      if (els.qrUrl) els.qrUrl.textContent = url;
+      if (els.qrImg) els.qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&bgcolor=ffffff&color=1b2240&data=' + encodeURIComponent(url);
+      if (els.qrModal) els.qrModal.classList.add('open');
+    }
+    function closeQr() { if (els.qrModal) els.qrModal.classList.remove('open'); }
+    els.btnQr.addEventListener('click', openQr);
+    if (els.btnCloseQr) els.btnCloseQr.addEventListener('click', closeQr);
+    if (els.qrModal) els.qrModal.addEventListener('click', function (e) { if (e.target === els.qrModal) closeQr(); });
+    if (els.btnCopyLink) els.btnCopyLink.addEventListener('click', function () {
+      var url = els.qrUrl ? els.qrUrl.textContent : location.href;
+      function done() { M.toast('Link disalin ke clipboard', 'ok'); }
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = url;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        ta.remove();
+        done();
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(done, fallback);
+      } else { fallback(); }
+    });
+  }
+
   /* ---------------- EVENTS ---------------- */
 
   function wire() {
@@ -514,6 +558,7 @@
     els.btnStop.addEventListener('click', stopDraw);
     els.btnResetRound.addEventListener('click', resetRound);
     if (els.btnFull) els.btnFull.addEventListener('click', toggleFullscreen);
+    if (els.btnQr) wireQr();
     els.btnClose.addEventListener('click', closeModal);
     els.btnAgain.addEventListener('click', again);
     els.searchBox.addEventListener('input', renderList);
@@ -529,6 +574,10 @@
     });
 
     document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && els.qrModal && els.qrModal.classList.contains('open')) {
+        els.qrModal.classList.remove('open');
+        return;
+      }
       var apop = document.getElementById('adminModal');
       if (apop && apop.classList.contains('open')) return;
       if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;

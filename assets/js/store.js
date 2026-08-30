@@ -31,7 +31,11 @@
     idleText: 'SIAP UNTUK UNDIAN',
     modalTitle: 'PEMENANG TERPILIH',
     prizeLabel: 'HADIAH UTAMA',
-    confirmWinner: false
+    confirmWinner: false,
+    eventDate: '',
+    organizer: '',
+    rollSpeed: 26,
+    suspenseSteps: 22
   };
 
   function safeParse(raw, fallback) {
@@ -241,6 +245,14 @@
     }
     var st = document.getElementById('siteSubtitle');
     if (st) st.textContent = s.subtitle || DEFAULT_SETTINGS.subtitle;
+
+    var meta = document.getElementById('siteMeta');
+    if (meta) {
+      var bits = [];
+      if (s.organizer) bits.push(s.organizer);
+      if (s.eventDate) bits.push(s.eventDate);
+      meta.textContent = bits.join('   ');
+    }
 
     applyLogo(s);
   }

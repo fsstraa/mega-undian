@@ -216,6 +216,12 @@ body::before {
 }
 .stage-head .subtitle::before { content: "• "; color: var(--accent2); }
 
+.stage-head .meta-line {
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px;
+  color: var(--accent2); margin-top: 10px; min-height: 16px;
+  text-transform: uppercase; font-weight: 600;
+}
+
 .slot-wrap {
   position: relative;
   display: flex; flex-direction: column;
@@ -723,6 +729,24 @@ details.bulk p { font-family: var(--font-mono); font-size: 11px; color: var(--mu
   font-family: var(--font-mono); font-size: 10px; letter-spacing: 1px;
   color: var(--accent2); margin-top: 2px;
 }
+
+/* ---------- MODAL QR / BUKA DI HP ---------- */
+
+.qr-card { width: min(420px, 96vw); }
+.qr-body {
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  padding: 26px 28px 24px;
+}
+.qr-img {
+  width: 240px; height: 240px;
+  background: #fff; border-radius: 14px;
+  border: 1px solid var(--border-strong);
+}
+.qr-url {
+  font-family: var(--font-mono); font-size: 11px; color: var(--muted);
+  word-break: break-all; text-align: center; max-width: 100%;
+}
+body.projector .qr-img { width: 34vh; height: 34vh; }
 
 /* ---------- MODE PROYEKTOR (layar besar) ---------- */
 

@@ -23,6 +23,8 @@
     setLabelNumber: $('setLabelNumber'), setLabelName: $('setLabelName'),
     setTicker: $('setTicker'), setIdle: $('setIdle'), setModalTitle: $('setModalTitle'),
     setPrize: $('setPrize'), setConfirm: $('setConfirm'), btnTest: $('btnTest'),
+    setOrganizer: $('setOrganizer'), setEventDate: $('setEventDate'),
+    setRollSpeed: $('setRollSpeed'), setSuspense: $('setSuspense'),
     setAccent: $('setAccent'), setAccent2: $('setAccent2'),
     bgType: $('bgType'), bgColor: $('bgColor'), bgUrl: $('bgUrl'),
     lblColor: $('lblColor'), gradWrap: $('gradWrap'), urlWrap: $('urlWrap'),
@@ -55,6 +57,10 @@
     s.idleText = els.setIdle.value || M.DEFAULT_SETTINGS.idleText;
     s.modalTitle = els.setModalTitle.value || M.DEFAULT_SETTINGS.modalTitle;
     s.prizeLabel = els.setPrize.value || M.DEFAULT_SETTINGS.prizeLabel;
+    s.organizer = els.setOrganizer.value;
+    s.eventDate = els.setEventDate.value;
+    s.rollSpeed = parseInt(els.setRollSpeed.value, 10) || 26;
+    s.suspenseSteps = parseInt(els.setSuspense.value, 10) || 22;
     s.accentColor = els.setAccent.value;
     s.accent2 = els.setAccent2.value;
     s.backgroundType = els.bgType.value;
@@ -122,6 +128,10 @@
     els.setIdle.value = s.idleText;
     els.setModalTitle.value = s.modalTitle;
     els.setPrize.value = s.prizeLabel;
+    els.setOrganizer.value = s.organizer || '';
+    els.setEventDate.value = s.eventDate || '';
+    els.setRollSpeed.value = s.rollSpeed || 26;
+    els.setSuspense.value = s.suspenseSteps || 22;
     els.setAccent.value = s.accentColor;
     els.setAccent2.value = s.accent2;
     els.bgType.value = s.backgroundType;
@@ -481,7 +491,7 @@
   /* ---------------- EVENTS ---------------- */
 
   function wire() {
-    [els.setTitle, els.setSubtitle, els.setLabelNumber, els.setLabelName, els.setTicker, els.setIdle, els.setModalTitle, els.setPrize,
+    [els.setTitle, els.setSubtitle, els.setLabelNumber, els.setLabelName, els.setTicker, els.setIdle, els.setModalTitle, els.setPrize, els.setOrganizer, els.setEventDate, els.setRollSpeed, els.setSuspense,
      els.setAccent, els.setAccent2, els.bgType, els.bgColor,
      els.setOverlay, els.setMatrix, els.setSound, els.setNames, els.setRemove, els.setConfirm]
       .forEach(function (el) {

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=6">
+  <link rel="stylesheet" href="assets/css/style.css?v=7">
 </head>
 <body>
   <!-- LAYER BACKGROUND -->
@@ -32,6 +32,7 @@
       <div class="stage-head">
         <h1 id="siteTitle">MEGA UNDIAN</h1>
         <p id="siteSubtitle" class="subtitle">FUTURE-DRAW SYSTEM // V2.0</p>
+        <p id="siteMeta" class="meta-line"></p>
       </div>
 
       <div class="slot-wrap" id="slotWrap">
@@ -51,6 +52,7 @@
         <button id="btnStop" class="btn btn-danger" disabled>&#9632; HENTIKAN</button>
         <button id="btnResetRound" class="btn btn-ghost">RESET ROUND</button>
         <button id="btnFull" class="btn btn-ghost">&#9711; FULLSCREEN</button>
+        <button id="btnQr" class="btn btn-ghost">&#10026; QR / BUKA DI HP</button>
       </div>
 
       <div class="confirm-bar" id="confirmBar" style="display:none">
@@ -142,6 +144,12 @@
             <label>LABEL HADIAH / PRIZE
               <input id="setPrize" type="text" placeholder="HADIAH UTAMA">
             </label>
+            <label>PENYELENGGARA (tampil di header acara)
+              <input id="setOrganizer" type="text" placeholder="mis. HIMASI">
+            </label>
+            <label>TANGGAL ACARA (tampil di header acara)
+              <input id="setEventDate" type="text" placeholder="mis. 30 AGT 2026">
+            </label>
             <label>WARNA AKSEN 1 (indigo / cyan)
               <input id="setAccent" type="color" value="#6d7cff">
             </label>
@@ -194,6 +202,12 @@
           </div>
 
           <div class="form-grid" style="margin-top:6px;">
+            <label>KECEPATAN ACAK (ms per langkah, rendah = lebih cepat)
+              <input id="setRollSpeed" type="range" min="10" max="60" step="2" value="26">
+            </label>
+            <label>SUASANA PENGUNGKAPAN (langkah terakhir sebelum berhenti)
+              <input id="setSuspense" type="range" min="10" max="40" step="2" value="22">
+            </label>
             <label>GELAP OVERLAY (0 = terang, 1 = gelap)
               <input id="setOverlay" type="range" min="0" max="1" step="0.05" value="0.35">
             </label>
@@ -273,14 +287,29 @@
     </div>
   </div>
 
+  <!-- MODAL QR / BUKA DI HP -->
+  <div class="apop" id="qrModal">
+    <div class="apop-card qr-card">
+      <div class="apop-head">
+        <div class="apop-title"><span class="brand-mark apop-mark">M</span> BUKA DI HP PESERTA</div>
+        <button id="btnCloseQr" class="apop-x" title="Tutup">&times;</button>
+      </div>
+      <div class="qr-body">
+        <img id="qrImg" class="qr-img" alt="QR code">
+        <p class="qr-url" id="qrUrl"></p>
+        <button id="btnCopyLink" class="btn btn-primary">SALIN LINK</button>
+      </div>
+    </div>
+  </div>
+
   <!-- TICKER BERJALAN -->
   <div class="ticker" id="ticker">
     <div class="ticker-tag">&gt; LIVE &lt;</div>
     <div class="marquee"><div class="marquee-track" id="tickerTrack"></div></div>
   </div>
 
-  <script src="assets/js/store.js?v=6"></script>
-  <script src="assets/js/draw.js?v=6"></script>
-  <script src="assets/js/admin.js?v=6"></script>
+  <script src="assets/js/store.js?v=7"></script>
+  <script src="assets/js/draw.js?v=7"></script>
+  <script src="assets/js/admin.js?v=7"></script>
 </body>
 </html>
