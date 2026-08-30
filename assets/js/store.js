@@ -267,7 +267,17 @@
       img.style.display = 'none';
       if (mark) mark.style.display = '';
     }
-    if (!v) { hide(); return; }
+    function readDb() {
+      dbGetLogo().then(function (d) {
+        if (d) {
+          img.src = d;
+          img.style.display = 'inline-block';
+          if (mark) mark.style.display = 'none';
+        } else {
+          hide();
+        }
+      }).catch(hide);
+    }
     if (v.indexOf('data:') === 0 || v.indexOf('http') === 0) {
       img.src = v;
       img.style.display = 'inline-block';
@@ -275,15 +285,7 @@
       return;
     }
     hide();
-    dbGetLogo().then(function (d) {
-      if (d) {
-        img.src = d;
-        img.style.display = 'inline-block';
-        if (mark) mark.style.display = 'none';
-      } else {
-        hide();
-      }
-    }).catch(hide);
+    readDb();
   }
 
   /* ---------- MATRIX RAIN ---------- */
@@ -437,6 +439,7 @@
     toast: toast,
     beep: beep,
     resetAll: resetAll,
+    applyLogo: applyLogo,
     dbSetBackground: dbSetBackground,
     dbGetBackground: dbGetBackground,
     dbDeleteBackground: dbDeleteBackground,

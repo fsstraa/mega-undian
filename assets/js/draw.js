@@ -185,8 +185,7 @@
     els.slotWrap.classList.add('winner-mode');
     els.slotNumber.classList.add('winner');
     els.slotNumber.textContent = String(p.number);
-    var s = M.getSettings();
-    els.slotName.textContent = (s.showNames && p.name) ? p.name : '';
+    els.slotName.textContent = p.name || 'TANPA NAMA';
     setStatus('KONFIRMASI: #' + p.number + ' TERPILIH. SAHKAN ATAU ACAK LAGI', '');
     els.confirmBar.style.display = '';
     M.beep(660, 0.12, 'triangle', 0.14);
@@ -246,22 +245,12 @@
     els.slotWrap.classList.add('winner-mode');
     els.slotNumber.classList.add('winner');
     els.slotNumber.textContent = String(p.number);
-    if (M.getSettings().showNames) {
-      els.slotName.textContent = p.name || 'TANPA NAMA';
-    } else {
-      els.slotName.textContent = '';
-    }
+    els.slotName.textContent = p.name || 'TANPA NAMA';
 
     els.modalNumber.textContent = String(p.number);
     els.modalPrize.textContent = M.getSettings().prizeLabel || '';
-    var showNames = M.getSettings().showNames;
-    if (showNames && p.name) {
-      els.modalName.textContent = p.name;
-      els.modalName.style.display = '';
-    } else {
-      els.modalName.textContent = '';
-      els.modalName.style.display = 'none';
-    }
+    els.modalName.textContent = p.name || 'TANPA NAMA';
+    els.modalName.style.display = '';
     fillModalMarquee(p.number, p.name);
     els.modal.classList.add('show');
     M.confetti(5000);
