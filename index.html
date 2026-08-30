@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=5">
+  <link rel="stylesheet" href="assets/css/style.css?v=6">
 </head>
 <body>
   <!-- LAYER BACKGROUND -->
@@ -104,35 +104,12 @@
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
   </button>
 
-  <!-- LOGIN ADMIN -->
-  <div class="apop" id="loginModal">
-    <div class="apop-card login-card">
-      <div class="apop-head">
-        <div class="apop-title"><span class="brand-mark apop-mark">M</span> ADMIN ACCESS // LOGIN</div>
-      </div>
-      <div class="login-body">
-        <label>USERNAME
-          <input id="loginUser" type="text" autocomplete="username" placeholder="username">
-        </label>
-        <label>PASSWORD
-          <input id="loginPass" type="password" autocomplete="current-password" placeholder="password" style="letter-spacing:3px">
-        </label>
-        <p class="login-msg" id="loginMsg"></p>
-        <button id="btnLogin" class="btn btn-primary" style="width:100%">MASUK</button>
-        <p class="login-hint">akses admin &middot; khusus petugas undian</p>
-      </div>
-    </div>
-  </div>
-
   <!-- POPUP ADMIN -->
   <div class="apop" id="adminModal">
     <div class="apop-card">
       <div class="apop-head">
         <div class="apop-title"><span class="brand-mark apop-mark">M</span> ADMIN PANEL // MEGA UNDIAN</div>
-        <div class="apop-x-wrap">
-          <button id="btnLogout" class="apop-lo">KELUAR</button>
-          <button id="btnCloseAdmin" class="apop-x" title="Tutup">&times;</button>
-        </div>
+        <button id="btnCloseAdmin" class="apop-x" title="Tutup">&times;</button>
       </div>
       <div class="apop-body"><div class="admin-wrap">
 
@@ -302,8 +279,8 @@
     <div class="marquee"><div class="marquee-track" id="tickerTrack"></div></div>
   </div>
 
-  <script src="assets/js/store.js?v=5"></script>
-  <script src="assets/js/draw.js?v=5"></script>
-  <script src="assets/js/admin.js?v=5"></script>
+  <script src="assets/js/store.js?v=6"></script>
+  <script src="assets/js/draw.js?v=6"></script>
+  <script src="assets/js/admin.js?v=6"></script>
 </body>
 </html>
