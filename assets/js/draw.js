@@ -448,6 +448,7 @@
 
     document.addEventListener('megacfg', function () {
       updateLabels();
+      renderList();
       renderTicker();
       if (!RUNNING) { if (!lastWinner) idleDisplay(); else idleDisplayIfIdle(); }
     });
@@ -464,8 +465,8 @@
     });
 
     setInterval(function () {
-      if (!RUNNING) { updateStats(); renderList(); renderTicker(); }
-    }, 4000);
+      if (!RUNNING) updateStats();
+    }, 3000);
 
     initDrag();
   }

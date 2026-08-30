@@ -95,6 +95,10 @@
     M.applyBackground(M.getSettings());
     syncBgSections();
     renderGradChips();
+    cfgChanged();
+  }
+
+  function cfgChanged() {
     document.dispatchEvent(new CustomEvent('megacfg'));
   }
 
@@ -296,6 +300,7 @@
     M.saveParticipants(list);
     M.toast('Peserta dihapus', 'ok');
     renderTable();
+    cfgChanged();
   }
 
   /* ---------------- BULK IMPORT ---------------- */
@@ -451,6 +456,7 @@
     M.toast((sourceName || 'Import') + ': ' + added + ' baru, ' + named + ' nama terdata, ' + skipped + ' dilewati', 'ok');
     renderTable();
     renderGenInfo();
+    cfgChanged();
   }
 
   /* ---------------- AUTO GENERATE NOMOR ---------------- */
@@ -487,6 +493,7 @@
     M.toast('Total peserta: ' + count + ' (nomor 1 s/d ' + count + ')', 'ok');
     renderTable();
     renderGenInfo();
+    cfgChanged();
   }
 
   /* ---------------- EVENTS ---------------- */
@@ -623,6 +630,7 @@
         els.addNumber.value = '';
         M.toast('Peserta ditambahkan', 'ok');
         renderTable();
+        cfgChanged();
       }
     });
     els.addName.addEventListener('keydown', function (e) { if (e.key === 'Enter') els.btnAdd.click(); });
@@ -723,6 +731,7 @@
             initSettings();
             M.applyBackground(M.getSettings());
             renderTable();
+            cfgChanged();
             M.toast('Data berhasil diimport', 'ok');
           } else {
             M.toast('Format JSON tidak valid', 'error');
@@ -741,6 +750,7 @@
       M.saveParticipants(list);
       M.saveHistory([]);
       renderTable();
+      cfgChanged();
       M.toast('Semua kemenangan direset', 'ok');
     });
 
@@ -749,6 +759,7 @@
       M.saveParticipants([]);
       M.saveHistory([]);
       renderTable();
+      cfgChanged();
       M.toast('Semua peserta dihapus', 'ok');
     });
 
